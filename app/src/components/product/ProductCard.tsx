@@ -5,6 +5,7 @@ import type { Product } from "../../data/products";
 import { getCategory, getOccasion } from "../../data/products";
 import { MediaPlaceholder } from "../ui/MediaPlaceholder";
 import { formatPrice } from "../../lib/format";
+import { asset } from "../../lib/asset";
 import { ThreeDCard } from "../ui/ThreeDCard";
 import { BulkOrderModal } from "./BulkOrderModal";
 
@@ -29,7 +30,7 @@ export function ProductCard({ product }: { product: Product }) {
             )}
             {product.images.length > 0 ? (
               <img
-                src={product.images[0]}
+                src={asset(product.images[0])}
                 alt={product.name}
                 loading="lazy"
                 decoding="async"
@@ -111,7 +112,7 @@ export function ProductCard({ product }: { product: Product }) {
         product={{
           id: product.id,
           title: product.name,
-          image: product.images[0],
+          image: product.images[0] ? asset(product.images[0]) : undefined,
           categoryLabel: category?.name,
           price: `${formatPrice(product.price)} ${product.priceUnit}`,
         }}

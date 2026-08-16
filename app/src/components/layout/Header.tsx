@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { business } from "../../config/business";
 import { WhatsAppButton } from "../ui/WhatsAppButton";
 import { buildWhatsAppLink } from "../../lib/whatsapp";
+import { asset } from "../../lib/asset";
 
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true },
@@ -69,7 +70,7 @@ export function Header() {
             <motion.img
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 350, damping: 20 }}
-              src="/logo.png"
+              src={asset("/logo.png")}
               alt="Gifties For You"
               className={`w-auto transition-all duration-300 ${scrolled ? "h-8 sm:h-9" : "h-10 sm:h-12"}`}
             />

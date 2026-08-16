@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Product } from "../../data/products";
 import { MediaPlaceholder } from "../ui/MediaPlaceholder";
+import { asset } from "../../lib/asset";
 
 export function ProductGallery({ product }: { product: Product }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -18,7 +19,7 @@ export function ProductGallery({ product }: { product: Product }) {
   return (
     <div>
       <div className="overflow-hidden rounded-lg border border-border">
-        <img src={active} alt={product.name} className="aspect-square w-full object-cover" />
+        <img src={asset(active)} alt={product.name} className="aspect-square w-full object-cover" />
       </div>
 
       {product.images.length > 1 && (
@@ -35,7 +36,7 @@ export function ProductGallery({ product }: { product: Product }) {
                 i === activeIndex ? "border-primary" : "border-transparent hover:border-border-strong"
               }`}
             >
-              <img src={src} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+              <img src={asset(src)} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
             </button>
           ))}
         </div>

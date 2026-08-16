@@ -4,6 +4,7 @@ import { OCCASIONS } from "../../data/products";
 import { SectionHeading } from "../ui/SectionHeading";
 import { ThreeDCard } from "../ui/ThreeDCard";
 import { Reveal } from "../ui/Reveal";
+import { asset } from "../../lib/asset";
 
 const OCCASION_META: Record<string, { icon: LucideIcon; image: string }> = {
   wedding: {
@@ -59,7 +60,7 @@ export function OccasionGrid() {
                 >
                   {/* High-Resolution Real Inventory Background Photo */}
                   <img
-                    src={meta.image}
+                    src={asset(meta.image)}
                     alt={occasion.name}
                     loading="lazy"
                     decoding="async"

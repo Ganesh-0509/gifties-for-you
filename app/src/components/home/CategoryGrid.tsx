@@ -4,6 +4,7 @@ import { CATEGORIES } from "../../data/products";
 import { SectionHeading } from "../ui/SectionHeading";
 import { ThreeDCard } from "../ui/ThreeDCard";
 import { Reveal } from "../ui/Reveal";
+import { asset } from "../../lib/asset";
 
 const CATEGORY_PHOTOS: Record<string, string> = {
   "return-gifts": "/products/trinket-box-set.jpg",
@@ -38,7 +39,7 @@ export function CategoryGrid() {
                   >
                     <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-canvas-deep/40 relative">
                       <img
-                        src={photo}
+                        src={asset(photo)}
                         alt={category.name}
                         loading="lazy"
                         decoding="async"

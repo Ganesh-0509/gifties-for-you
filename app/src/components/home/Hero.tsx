@@ -8,6 +8,7 @@ import { buildWhatsAppLink } from "../../lib/whatsapp";
 import { MediaPlaceholder } from "../ui/MediaPlaceholder";
 import { FloatingPetals } from "./FloatingPetals";
 import { ThreeDCard } from "../ui/ThreeDCard";
+import { asset } from "../../lib/asset";
 import type { CategoryId } from "../../data/products";
 
 const ROTATING_OCCASIONS = [
@@ -60,7 +61,11 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden border-b border-border bg-canvas">
-      <div className="hero-bg-photo absolute inset-0" aria-hidden="true" />
+      <div
+        className="hero-bg-photo absolute inset-0"
+        style={{ backgroundImage: `url("${asset("/hero-bg.jpg")}")` }}
+        aria-hidden="true"
+      />
       <div
         className="absolute inset-0 bg-gradient-to-r from-canvas from-0% via-canvas/65 via-42% to-transparent to-65%"
         aria-hidden="true"
@@ -141,7 +146,7 @@ export function Hero() {
                 >
                   {item.image ? (
                     <img
-                      src={item.image}
+                      src={asset(item.image)}
                       alt={item.label}
                       className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />

@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import { AtSign, MapPin, Clock, Phone } from "lucide-react";
 import { business } from "../../config/business";
 import { CATEGORIES } from "../../data/products";
+import { asset } from "../../lib/asset";
 
 export function Footer() {
   return (
     <footer className="border-t border-border bg-canvas-deep">
       <div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <img src="/logo.png" alt="Gifties For You" className="h-11 w-auto" />
+          <img src={asset("/logo.png")} alt="Gifties For You" className="h-11 w-auto" />
           <p className="mt-3 max-w-xs text-sm text-ink-muted">{business.shortDescription}</p>
           <a
             href={business.instagramUrl}

@@ -9,6 +9,7 @@ import { SectionHeading } from "../components/ui/SectionHeading";
 import { BulkOrderModal } from "../components/product/BulkOrderModal";
 import { formatPrice } from "../lib/format";
 import { buildProductEnquiryMessage, buildWhatsAppLink } from "../lib/whatsapp";
+import { asset } from "../lib/asset";
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -207,7 +208,7 @@ function ProductDetailView({ slug }: { slug: string | undefined }) {
         product={{
           id: product.id,
           title: product.name,
-          image: product.images[0],
+          image: product.images[0] ? asset(product.images[0]) : undefined,
           categoryLabel: category?.name,
           price: `${formatPrice(product.price)} ${product.priceUnit}`,
         }}

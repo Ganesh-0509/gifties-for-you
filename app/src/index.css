@@ -210,7 +210,8 @@
     reads as a considered moment rather than wallpaper.
   */
   .hero-bg-photo {
-    background-image: url("/hero-bg.jpg");
+    /* background-image is set inline in Hero.tsx via the asset() helper so it
+       resolves correctly under Vite's base path (GitHub Pages subpath). */
     background-size: cover;
     background-position: center;
     animation: hero-drift 34s var(--ease-in-out) infinite alternate;
