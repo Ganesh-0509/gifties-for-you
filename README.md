@@ -43,20 +43,27 @@ build record (architecture decisions, what's verified vs. still open, real bugs 
 ## Project structure
 
 ```
-app/                          Phase 2 — the active Next.js + Cloudflare Workers app
-  migrations/                 D1 schema (orders, catalog, settings)
+app/                          Phase 2/4 — the active Next.js + Cloudflare Workers app
+  migrations/                 D1 schema (orders, catalog, product photos, settings)
   src/
-    app/                      Routes: home, shop, product/[slug], cart, checkout, bulk-orders,
-                               about, contact, faq, legal/*, api/orders/*, api/webhooks/razorpay
-    components/                UI, grouped by area (layout, product, cart, checkout, bulk, legal)
+    app/
+      (store)/                Public routes: home, shop, product/[slug], cart, checkout,
+                               bulk-orders, about, contact, faq, legal/* — own layout (Header/
+                               Footer/cart), kept separate so /admin doesn't inherit it
+      admin/                  Owner panel: login, dashboard, orders (+ Razorpay refund),
+                               products, categories, settings, help — own layout, no cart
+      api/                    orders/*, webhooks/razorpay, product-photo/[id]
+    components/                UI, grouped by area (layout, product, cart, checkout, bulk, legal, admin)
     lib/
       site.ts                  SITE (fixed) + Settings (admin-editable) + shared helpers
       schema.ts / db.ts        Drizzle schema + order queries/status enum
+      admin-auth.ts             PBKDF2 password hash + HMAC-signed session cookie
       catalog.ts / catalog-types.ts   Catalog CRUD (server) + client-safe types
       seed-data.ts              First-run catalogue seed, ported from phase1-demo's products.ts
       cart.tsx                  Client cart (localStorage, no cached prices)
       order-totals.ts           Server-side total recomputation — the client never sets a price
       razorpay.ts                Orders/Payments/Refunds REST calls + HMAC verification
+      image-file.ts              Client-side photo downscale/compress before upload
 
 phase1-demo/                  Phase 1 — the original static demo, preserved unchanged
   (see phase1-demo/app/DEMO-DATA-README.md and QA-AUDIT.md for its own history)
@@ -79,6 +86,10 @@ Payments need Razorpay **test-mode** keys (free, no KYC) — copy `app/.dev.vars
 `app/.dev.vars` and fill in your own test keys from https://dashboard.razorpay.com. Without
 them, checkout still works end-to-end up to the payment step, which then shows a graceful
 "payments are not configured yet" message instead of erroring.
+
+The **admin panel** is at `/admin`. Set `ADMIN_PASSWORD` in `.dev.vars` (see
+`.dev.vars.example`) to log in — it works as a permanent break-glass login alongside whatever
+password you set for yourself from Settings once inside.
 
 ## Build & preview (the real Workers runtime, not `next dev`)
 
@@ -114,12 +125,16 @@ been built and verified against **local** D1 + Razorpay test mode only.
   payment integration layer" — a deliberate pivot to full cart + checkout + Razorpay, confirmed
   via clarifying questions before any code was written. Full reasoning, architecture, and
   verification record in `DETAILS.md`.
+- **Phase 4** (2026-08-17, same session): admin panel — login, dashboard, orders with a Razorpay
+  refund button, product/category editing with photo uploads, settings. Includes the full record
+  of a real bug found and fixed during verification (the catalog was silently running entirely
+  off in-memory seed data instead of D1, for two separate root causes) — see `DETAILS.md`.
 
 ## Known gaps (tracked, not blocking further development)
 
 - Prices, minimum-order-quantities, delivery fee, email, and exact address are all still
   placeholder — carried over unconfirmed from Phase 1. See `phase1-demo/app/DEMO-DATA-README.md`
   for the itemized real-vs-demo map.
-- No admin panel yet (owner can't self-manage products/orders/settings) — planned next.
 - No live payment test yet against real Razorpay test-mode keys — needs Ganesh's own account.
+- No email notifications, SEO/JSON-LD, or coupon system yet — Phase 5.
 - Not deployed — no Cloudflare account created for this client yet.

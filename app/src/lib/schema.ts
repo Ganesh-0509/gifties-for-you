@@ -63,6 +63,13 @@ export const settingsTable = sqliteTable("settings", {
   value: text("value").notNull(),
 });
 
+export const productPhotos = sqliteTable("product_photos", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  productId: text("product_id").notNull(),
+  data: text("data").notNull(),
+  v: integer("v").notNull().default(1),
+});
+
 export const siteImages = sqliteTable("site_images", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   groupKey: text("group_key").notNull(),

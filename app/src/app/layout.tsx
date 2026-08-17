@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "@/lib/cart";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { getSettings } from "@/lib/catalog";
 import { publicSite } from "@/lib/site";
 
@@ -29,19 +26,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const settings = await getSettings();
-  const site = publicSite(settings);
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
-        <CartProvider>
-          <Header site={site} />
-          <main className="flex-1">{children}</main>
-          <Footer site={site} />
-        </CartProvider>
-      </body>
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }
