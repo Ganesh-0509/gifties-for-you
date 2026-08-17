@@ -1,15 +1,16 @@
-import { useState } from "react";
-import type { Product } from "../../data/products";
-import { MediaPlaceholder } from "../ui/MediaPlaceholder";
-import { asset } from "../../lib/asset";
+"use client";
 
-export function ProductGallery({ product }: { product: Product }) {
+import { useState } from "react";
+import { Package } from "lucide-react";
+import type { CatProduct } from "@/lib/catalog-types";
+
+export function ProductGallery({ product }: { product: CatProduct }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   if (product.images.length === 0) {
     return (
-      <div className="overflow-hidden rounded-lg border border-border">
-        <MediaPlaceholder categoryId={product.categoryId} label={product.name} className="aspect-square w-full" />
+      <div className="flex aspect-square w-full items-center justify-center rounded-lg border border-border bg-canvas-deep/30 text-ink-faint">
+        <Package className="h-12 w-12" aria-hidden="true" />
       </div>
     );
   }
@@ -19,7 +20,8 @@ export function ProductGallery({ product }: { product: Product }) {
   return (
     <div>
       <div className="overflow-hidden rounded-lg border border-border">
-        <img src={asset(active)} alt={product.name} className="aspect-square w-full object-cover" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={active} alt={product.name} className="aspect-square w-full object-cover" />
       </div>
 
       {product.images.length > 1 && (
@@ -32,11 +34,12 @@ export function ProductGallery({ product }: { product: Product }) {
               aria-selected={i === activeIndex}
               aria-label={`Photo ${i + 1} of ${product.images.length}`}
               onClick={() => setActiveIndex(i)}
-              className={`h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-colors duration-150 ${
+              className={`h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-colors ${
                 i === activeIndex ? "border-primary" : "border-transparent hover:border-border-strong"
               }`}
             >
-              <img src={asset(src)} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt="" loading="lazy" className="h-full w-full object-cover" />
             </button>
           ))}
         </div>

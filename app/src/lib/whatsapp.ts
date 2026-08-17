@@ -1,60 +1,33 @@
-import { business } from "../config/business";
-import type { Product } from "../data/products";
+import { waLinkTo, money } from "./site";
+import type { CatProduct } from "./catalog-types";
 
-/** Builds a wa.me deep link from a plain-text message. */
-export function buildWhatsAppLink(message: string, number: string = business.whatsappNumber): string {
-  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+export function buildWhatsAppLink(whatsapp: string, message: string): string {
+  return waLinkTo(whatsapp, message);
 }
 
-/** Product enquiry — carries product name, category and (optional) quantity/customization context. */
-export function buildProductEnquiryMessage(
-  product: Product,
-  categoryName: string,
-  opts?: { quantity?: number; customizationRequest?: string },
-): string {
-  const lines = [
-    `Hi ${business.name}! I'm interested in this product:`,
-    `• ${product.name} (${categoryName})`,
-    `• Price shown: ₹${product.price} ${product.priceUnit}`,
-  ];
-
-  if (opts?.quantity) {
-    lines.push(`• Quantity I need: ${opts.quantity}`);
-  }
-  if (opts?.customizationRequest) {
-    lines.push(`• Customization request: ${opts.customizationRequest}`);
-  }
-
-  lines.push("Could you share more details and availability?");
-
-  return lines.join("\n");
+export function buildProductEnquiryMessage(product: CatProduct): string {
+  return [
+    `Hi! I'm interested in "${product.name}" (${money(product.price)} ${product.priceUnit}).`,
+    `Could you share more details / availability?`,
+  ].join(" ");
 }
 
-export interface BulkEnquiryFields {
-  eventType: string;
-  approxQuantity: string;
-  preferredDate: string;
-  budgetRange: string;
-  productPreference: string;
-  customizationRequirements: string;
-  message: string;
+export interface BulkOrderRequest {
+  productName?: string;
+  occasion?: string;
+  quantity?: string;
+  customization?: string;
+  eventDate?: string;
+  notes?: string;
 }
 
-/** Bulk/event enquiry — used by the Bulk Orders page form. */
-export function buildBulkEnquiryMessage(fields: BulkEnquiryFields): string {
-  const lines = [`Hi ${business.name}! I'd like a quote for a bulk/event order.`, ""];
-
-  if (fields.eventType) lines.push(`• Event type: ${fields.eventType}`);
-  if (fields.approxQuantity) lines.push(`• Approx. quantity: ${fields.approxQuantity}`);
-  if (fields.preferredDate) lines.push(`• Preferred date: ${fields.preferredDate}`);
-  if (fields.budgetRange) lines.push(`• Budget range: ${fields.budgetRange}`);
-  if (fields.productPreference) lines.push(`• Product preference: ${fields.productPreference}`);
-  if (fields.customizationRequirements)
-    lines.push(`• Customization requirements: ${fields.customizationRequirements}`);
-  if (fields.message) {
-    lines.push("");
-    lines.push(`Additional message: ${fields.message}`);
-  }
-
+export function buildBulkOrderMessage(req: BulkOrderRequest): string {
+  const lines = ["Hi! I'd like a bulk/event order quote."];
+  if (req.productName) lines.push(`Product/category: ${req.productName}`);
+  if (req.occasion) lines.push(`Occasion: ${req.occasion}`);
+  if (req.quantity) lines.push(`Quantity: ${req.quantity}`);
+  if (req.eventDate) lines.push(`Event date: ${req.eventDate}`);
+  if (req.customization) lines.push(`Customization: ${req.customization}`);
+  if (req.notes) lines.push(`Notes: ${req.notes}`);
   return lines.join("\n");
 }
